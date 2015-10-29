@@ -1,33 +1,27 @@
-package com.notes4geeks.learn.spark;
+package com.notes4geeks.learn.spark.basic;
 
 import java.util.Arrays;
 
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.VoidFunction;
 
-public class SparkEvenByFilter {
+public class SparkAllNosByUnion {
 
 	public static void main(String[] args) {
 		String master = args.length > 0 ? args[0] : "local[4]";
 		
-		Integer[] arr = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
-		
 		JavaSparkContext sc = new JavaSparkContext(master, SparkSumByFold.class.getSimpleName());
 		
-		JavaRDD<Integer> rdd = sc.parallelize(Arrays.asList(arr));
+		JavaRDD<Integer> oddNos = sc.parallelize(Arrays.asList(1, 3, 5, 3, 7, 7, 9, 1));
+		JavaRDD<Integer> evenNos = sc.parallelize(Arrays.asList(2, 4, 2, 2, 2, 6, 0, 4));
+		 
+		JavaRDD<Integer> allNos = oddNos.union(evenNos);
 		
-		JavaRDD<Integer> evenNos = rdd.filter(new Function<Integer, Boolean>() {
-			
-			@Override
-			public Boolean call(Integer v1) throws Exception {
-				return v1%2 == 0;
-			}
-		});
+		System.out.println("printing all nos.");
 		
-		// print the even nos out of all Nos.
-		evenNos.foreach(new VoidFunction<Integer>() {
+		// print the all nos.
+		allNos.foreach(new VoidFunction<Integer>() {
 			
 			@Override
 			public void call(Integer t) throws Exception {
@@ -37,7 +31,7 @@ public class SparkEvenByFilter {
 		});
 		
 		sc.close();
-
+		
 	}
 
 }

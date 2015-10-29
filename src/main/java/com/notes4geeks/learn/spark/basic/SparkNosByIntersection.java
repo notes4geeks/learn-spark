@@ -1,4 +1,4 @@
-package com.notes4geeks.learn.spark;
+package com.notes4geeks.learn.spark.basic;
 
 import java.util.Arrays;
 
